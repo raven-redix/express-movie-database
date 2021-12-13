@@ -7,8 +7,6 @@ Movie.init({
   year: DataTypes.INTEGER,
   genre: DataTypes.STRING,
   rating: DataTypes.STRING
-  //stars: DataTypes.ARRAY,
-  //writers" DataTypes.ARRAY
 }, {
   sequelize, 
   timestamps: false

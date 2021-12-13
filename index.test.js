@@ -1,9 +1,5 @@
 const {sequelize} = require('./db');
-// const {Movie} = require('./Models/Movie');
-// const {CastMember} = require('./Models/CastMember');
-// const {CrewMember} = require('./Models/CrewMember');
 const { Movie, CastMember, CrewMember } = require('./index');
-
 
 
 describe('Movie database', () => {
@@ -16,27 +12,21 @@ describe('Movie database', () => {
         year: 2008, 
         genre: 'Action', 
         rating: 'R', 
-        director: 'Kay Cannon',
-        stars: ['James McAvoy', 'Angelina Jolie', 'Morgan Freeman'],
-        writers: ['Michael Brandt', 'Derek Haas', 'Chris Morgan']
+        director: 'Kay Cannon'
       },
       {
         title: 'Cinderella', 
         year: 2021,
         genre: 'Family', 
         rating: 'PG', 
-        director: 'Kay Cannon',
-        stars: ['Camila Cabello', 'Billy Porter', 'Idina Menzel'], 
-        writers: ['Kay Cannon']
+        director: 'Kay Cannon'
       },
       {
         title: 'Life', 
         year: 1999,
         genre: 'Dramedy', 
         rating: 'R', 
-        director: 'Ted Demme',
-        stars: ['Martin Lawrence', 'Eddie Murphy', 'Obba Babatunde'], 
-        writers: ['Robert Ramsey', 'Matthew Stone']
+        director: 'Ted Demme'
       }
     ]
     
@@ -116,7 +106,7 @@ describe('Movie database', () => {
     CastMember.bulkCreate(testCastMembers);
     CrewMember.bulkCreate(testCrewMembers);
 
-    //Linking the Movie and CastMember Models
+    //Connecting the Movie and CastMember Models
       //McAvoy was added in the testing below
     //adding Jolie (id of 2) to Wanted (id of 1)
     const movie1 = await Movie.findOne({where: {title: 'Wanted'}});
@@ -140,7 +130,7 @@ describe('Movie database', () => {
     movie3.addCastMember(castMember6);
 
 
-    //Linking the Movie and CrewMember Models
+    //Connecting the Movie and CrewMember Models
       //Brandt was added in the testing below
     //adding Simpson to Life
     const crewMember2 = await CrewMember.findOne({where: {name: 'Geoffrey Simpson'}})
@@ -163,12 +153,12 @@ describe('Movie database', () => {
 
     const testMovie = await Movie.findOne({where: {title: 'Wanted'}});
     expect(testMovie.title).toBe('Wanted');
+    expect(testMovie.year).toEqual(2008);
     expect(testMovie.genre).toBe('Action');
     expect(testMovie.rating).toBe('R');
   });
 
   test('can create CastMember', async () => {
-
     const testCastMember = await CastMember.findOne({where: {name: 'James McAvoy'}})
     expect(testCastMember.name).toBe('James McAvoy');
     expect(testCastMember.part).toBe('Wesley');
@@ -176,7 +166,6 @@ describe('Movie database', () => {
   });
 
   test('can create CrewMember', async () => {
-    
     const testCrewMember = await CrewMember.findOne({where: {id: 1}})
     expect(testCrewMember.name).toBe('Michael Brandt')
     expect(testCrewMember.role).toBe('writer');
@@ -198,10 +187,7 @@ describe('Movie database', () => {
     testMovie.addCrewMember(testCrewMember);
   })
 
-  //not sure if this is correct syntax, but I know we need to 
-  //close the database to prevent memory leaks
-  //will work on this
-  // afterAll(async () => {
-  //   sequelize.close()
-  // });
+  afterAll(async () => {
+    sequelize.close()
+  });
 });
